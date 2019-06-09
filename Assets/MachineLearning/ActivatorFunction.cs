@@ -1,26 +1,38 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ActivatorFunction
+public interface ActivatorFunction
 {
-    abstract public double Calculate(double input);
+     double Calculate(double input);
+    double Derivative(double input);
 }
 
 public class StepFunction : ActivatorFunction
 {
-    public override double Calculate(double input)
+    public double Calculate(double input)
     {
         return input < 0 ? 0 : 1;
+    }
+
+    public double Derivative(double input)
+    {
+        return 0;
     }
 }
 
 public class BalancedSigmoid : ActivatorFunction
 {
-    public override double Calculate(double input)
+    public virtual double Calculate(double input)
     {
         double k = (double)System.Math.Exp(input);
         return (k / (1 + k)) - 0.5f;
+    }
+
+    public virtual double Derivative(double input)
+    {
+        return Calculate(input) * (1 - Calculate(input));
     }
 }
 
@@ -28,6 +40,11 @@ public class Tanh : BalancedSigmoid
 {
     public override double Calculate(double input)
     {
-        return 2 * base.Calculate(2 * input) - 1;
+        return System.Math.Tanh(input);
+    }
+
+    public override double Derivative(double input)
+    {
+        return 1 - Math.Pow(Calculate(input), 2);
     }
 }
