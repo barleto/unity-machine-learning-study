@@ -9,6 +9,19 @@ public interface ActivatorFunction
     double Derivative(double input);
 }
 
+public class PassThroughFunction : ActivatorFunction
+{
+    public double Calculate(double input)
+    {
+        return input;
+    }
+
+    public double Derivative(double input)
+    {
+        return 1;
+    }
+}
+
 public class StepFunction : ActivatorFunction
 {
     public double Calculate(double input)
